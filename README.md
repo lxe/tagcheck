@@ -1,4 +1,4 @@
-# tagcheck [![Build Status](https://travis-ci.org/lxe/tagcheck.svg?branch=master)](https://travis-ci.org/lxe/tagcheck)
+# tagcheck [![Build Status](https://travis-ci.org/lxe/tagcheck.svg?branch=master)](https://travis-ci.org/lxe/tagcheck) [![Coverage Status](https://coveralls.io/repos/lxe/tagcheck/badge.png)](https://coveralls.io/r/lxe/tagcheck)
 
 Verify whether your `git+ssh://` dependencies are up to date.
 
