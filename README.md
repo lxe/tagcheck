@@ -1,4 +1,4 @@
-# tagcheck
+# tagcheck [![Build Status](https://travis-ci.org/lxe/tagcheck.svg?branch=master)](https://travis-ci.org/lxe/tagcheck)
 
 Verify whether your `git+ssh://` dependencies are up to date.
 
