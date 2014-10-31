@@ -26,7 +26,7 @@ your version: v2.0.1  latest version: v2.0.1 OK
 
 ## License
 
-Copyright (c) 2014 Uber.
+Copyright (c) 2014 Aleksey Smolenchuk <lxe@lxe.co>.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
