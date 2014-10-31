@@ -5,6 +5,7 @@ Verify whether your `git+ssh://` dependencies are up to date.
 ## Usage
 
 ```bash
+$ npm install -g tagcheck
 $ tagcheck
 Retrieving tags...
 
