@@ -18,7 +18,10 @@ function test(pkg, done) {
   var output = '';
   tagcheck(pkg, function () {
     output += fmt.apply(null, [].slice.call(arguments)) + '\n';
-  }, done);
+  }, function (err, status) {
+    console.log(output);
+    done(err, status);
+  });
 }
 
 test(pkg_out_of_date, function (err, status) {

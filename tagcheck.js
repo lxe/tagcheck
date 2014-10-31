@@ -46,6 +46,14 @@ function tagCheck (pkg, log, done) {
       (sshDep.match(/\/\/([^#]+)/) || [])[1]);
 
     exec(cmd, function onexec (error, stdout, stderr) {
+      if (error) {
+        if (done) {
+          done(error);
+        } else {
+          process.exit(allUpToDate ? 0 : -1);
+        }
+      }
+
       var tags = stdout.match(/refs\/tags\/(v?[\d\.]+)/gm) || [];
       var yourVersion = (sshDep.match(/#(v?[\d\.]+)$/) || ['', '[none]'])[1];
       var latestVersion = tags.map(function (tag) {
