@@ -47,6 +47,7 @@ function tagCheck (pkg, log, done) {
 
     exec(cmd, function onexec (error, stdout, stderr) {
       if (error) {
+        log(error.stack);
         if (done) {
           done(error);
         } else {
