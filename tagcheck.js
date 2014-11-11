@@ -55,11 +55,11 @@ function tagCheck (pkg, log, done) {
         }
       }
 
-      var tags = stdout.match(/refs\/tags\/(v?[\d\.]+)/gm) || [];
+      var tags = stdout.match(/refs\/tags\/(v?[\d\.][^\}\{]+)$/gm) || [];
       var yourVersion = (sshDep.match(/#(v?[\d\.]+)$/) || ['', '[none]'])[1];
       var latestVersion = tags.map(function (tag) {
         return tag.split('/').pop();
-      }).sort().pop();
+      }).sort().pop().trim();
 
       var upToDate = (yourVersion === latestVersion);
       if (!upToDate) {
