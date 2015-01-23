@@ -26,22 +26,15 @@ function tagCheck (pkg, log, done) {
 
   log('Retrieving tags...\n');
 
-  var sshDeps = [
-    'dependencies',
-    'devDependencies',
-    'peerDependencies'
-  ].reduce(function (deps, key) {
-    var sshDeps = Object.keys(pkg[key] || { })
-      .map(function (name) { return pkg[key][name]; })
-      .filter(RegExp.prototype.test.bind(/^git\+ssh:\/\//));
+  var sshDeps = getSshDeps(pkg);
+  var sshDepNames = Object.keys(sshDeps);
 
-    return deps.concat(sshDeps);
-  }, []);
+  var needToUpdate = null;
+  var tagsChecked = sshDepNames.length;
 
-  var tagsChecked = sshDeps.length;
-  var allUpToDate = true;
+  sshDepNames.forEach(function (sshDepName) {
+    var sshDep = sshDeps[sshDepName];
 
-  sshDeps.forEach(function (sshDep) {
     var cmd = fmt('git ls-remote %s',
       (sshDep.match(/\/\/([^#]+)/) || [])[1]);
 
@@ -51,7 +44,7 @@ function tagCheck (pkg, log, done) {
         if (done) {
           done(error);
         } else {
-          process.exit(allUpToDate ? 0 : -1);
+          process.exit(needToUpdate ? -1 : 0);
         }
       }
 
@@ -63,7 +56,12 @@ function tagCheck (pkg, log, done) {
 
       var upToDate = (yourVersion === latestVersion);
       if (!upToDate) {
-        allUpToDate = false;
+        var yourTagVersion = '#' + yourVersion;
+        var latestTagVersion = '#' + latestVersion;
+        var latestUrl = sshDep.replace(yourTagVersion, latestTagVersion);
+
+        needToUpdate = needToUpdate || {};
+        needToUpdate[sshDepName] = latestUrl;
       }
 
       log('package: %s', sshDep);
@@ -76,14 +74,38 @@ function tagCheck (pkg, log, done) {
 
       if (tagsChecked === 0) {
         if (done) {
-          done(null, allUpToDate);
+          done(null, needToUpdate);
         } else {
-          process.exit(allUpToDate ? 0 : -1);
+          process.exit(needToUpdate ? -1 : 0);
         }
       }
     });
   });
 }
 
+function getSshDeps(pkg) {
+  var pkgDependencyTypes = [
+    'dependencies',
+    'devDependencies',
+    'peerDependencies'
+  ];
 
+  var dependencies = {};
 
+  pkgDependencyTypes.forEach(function getDependencies(type) {
+    var pkgDeps = pkg[type];
+    if (!pkgDeps) {
+      return;
+    }
+
+    var deps = Object.keys(pkgDeps);
+    deps.forEach(function buildDependenciesObject(dep) {
+      var url = pkgDeps[dep];
+      if (/^git\+ssh:\/\//.test(url)) {
+        dependencies[dep] = url;
+      }
+    });
+  });
+
+  return dependencies;
+}
