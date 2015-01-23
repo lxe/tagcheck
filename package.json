@@ -1,6 +1,6 @@
 {
   "name": "tagcheck",
-  "version": "1.7.1",
+  "version": "2.0.0",
   "description": "Check git+ssh:// package dependency version tags against available remote tags.",
   "main": "tagcheck.js",
   "scripts": {
