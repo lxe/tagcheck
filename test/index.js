@@ -25,9 +25,10 @@ function test(pkg, done) {
 }
 
 test(pkg_out_of_date, function (err, status) {
-  assert(status === false, 'should respond with a falsy status if upgrade is suggested');
+  assert.deepEqual(status, pkg_up_to_date.dependencies,
+    'should respond with an object of dependencies to update');
   test(pkg_up_to_date, function (err, status) {
-    assert(status === true, 'should respond with a truthy status if up to date');
+    assert(status === null, 'should respond with null if up to date');
     process.exit(0);
   });
 });
